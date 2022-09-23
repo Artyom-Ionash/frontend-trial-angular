@@ -1,0 +1,45 @@
+<div class="d-flex justify-content-center">
+  <div class="navigator-container">
+    <ul class="navigator-container__tabs">
+      <li
+        *ngFor="let tab of tabs"
+        class="navigator-container__tab"
+        [ngClass]="{
+          'navigator-container__tab_selected': selectedTabId === tab.id
+        }"
+      >
+        <a
+          [routerLink]="['/navigator']"
+          [queryParams]="{ tab: tab.id }"
+          class="navigator-container__tab-button"
+          >{{ tab.title }}</a
+        >
+      </li>
+    </ul>
+    <div class="navigator-container__account-list">
+      <table
+        *ngIf="transactions.length; else transactionsNotFound"
+        class="table"
+      >
+        <thead>
+          <tr>
+            <th class="border-0 font-weight-normal p-1" scope="col">Name</th>
+            <th class="border-0 font-weight-normal p-1" scope="col">Acount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions">
+            <td class="p-1">
+              {{ transaction.name.first }} {{ transaction.name.last }}
+            </td>
+            <td class="p-1">{{ transaction.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #transactionsNotFound>
+        No transactions satisfy the condition!
+      </ng-template>
+    </div>
+  </div>
+</div>
+<ng-content></ng-content>
