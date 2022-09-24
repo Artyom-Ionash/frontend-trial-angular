@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { TransactionService } from '../../services/transaction.service';
 import { ITransaction, ITransactionType } from '../../models/ITransaction';
-// import IUsersType from 'src/services/user/IUsersType';
 
 @Component({
   selector: 'app-navigator',
@@ -24,22 +23,19 @@ export class NavigatorComponent implements OnInit {
     this.tabs = this.transactionService.getTransactionTypes();
 
     this.route.queryParamMap.subscribe((params) => {
-      const tabId = params.get('tab');
-      if (tabId) {
-        this.getTransactionsByType(tabId);
-        this.selectedTabId = Number.parseInt(tabId);
+      const paramTabId = params.get('tab');
+      if (paramTabId) {
+        this.selectedTabId = Number.parseInt(paramTabId);
+        const currentType = this.tabs.find(
+          (tab) => tab.id === this.selectedTabId
+        );
+        if (currentType === undefined)
+          throw new Error(`Tab ID ${this.selectedTabId} is not valid!`);
+
+        this.transactions = this.transactionService.getTransactionsByType(
+          currentType.name
+        );
       }
     });
-  }
-
-  getTransactionsByType(id: string): void {
-    const tabId = Number.parseInt(id);
-    const currentType = this.tabs.find((tab) => tab.id === tabId);
-    if (currentType === undefined)
-      throw new Error(`Tab ID ${id} is not valid!`);
-
-    this.transactions = this.transactionService.getTransactionsByType(
-      currentType.name
-    );
   }
 }
