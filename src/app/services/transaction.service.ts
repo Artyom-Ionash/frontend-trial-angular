@@ -14,7 +14,18 @@ export class TransactionService {
   private transactions: ITransaction[] = [];
 
   constructor() {
-    this.transactions = JSON.parse(JSON.stringify(transactions)).data;
+    this.transactions = JSON.parse(JSON.stringify(transactions)).data.map(
+      (transaction: { amount: string | number }) => {
+        const [min, max] = (transaction.amount as string)
+          .slice('floating'.length)
+          .slice(1, -1)
+          .split(', ')
+          .map((n) => Number.parseFloat(n));
+
+        transaction.amount = Math.floor(Math.random() * (max - min + 1)) + min;
+        return transaction;
+      }
+    );
   }
 
   getAllTransactions(): ITransaction[] {

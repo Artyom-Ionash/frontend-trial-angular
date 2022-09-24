@@ -41,17 +41,5 @@ export class NavigatorComponent implements OnInit {
     this.transactions = this.transactionService.getTransactionsByType(
       currentType.name
     );
-
-    function getRandomInt(min: number, max: number) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    if (this.transactions) {
-      this.transactions.map((user) => {
-        user.amount = getRandomInt(0, 1000);
-      });
-    }
   }
 }
